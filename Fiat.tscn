@@ -1,0 +1,266 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Factory.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Shop.gd" type="Script" id=2]
+[ext_resource path="res://candy_small.png" type="Texture" id=3]
+[ext_resource path="res://bill.png" type="Texture" id=4]
+[ext_resource path="res://chocolate_candy.png" type="Texture" id=5]
+[ext_resource path="res://shop.png" type="Texture" id=6]
+[ext_resource path="res://slacker_french.png" type="Texture" id=7]
+[ext_resource path="res://government.png" type="Texture" id=8]
+[ext_resource path="res://chocolate_small.png" type="Texture" id=9]
+[ext_resource path="res://Government.gd" type="Script" id=10]
+[ext_resource path="res://Globals.gd" type="Script" id=11]
+
+[node name="Fiat" type="Node2D"]
+
+[node name="ProduceButton" type="Button" parent="."]
+margin_left = 320.0
+margin_top = 8.0
+margin_right = 384.0
+margin_bottom = 32.0
+text = "Produce"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CreateMoney" type="Button" parent="."]
+margin_left = 400.0
+margin_top = 8.0
+margin_right = 464.0
+margin_bottom = 32.0
+text = "Create money"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SendProductsToMarketButton" type="Button" parent="."]
+margin_left = 320.0
+margin_top = 40.0
+margin_right = 489.0
+margin_bottom = 64.0
+text = "Send products to market"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SendMoneyToMarketButton" type="Button" parent="."]
+margin_left = 320.0
+margin_top = 72.0
+margin_right = 477.0
+margin_bottom = 96.0
+text = "Send money to market"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CalculatePrices" type="Button" parent="."]
+margin_left = 320.0
+margin_top = 104.0
+margin_right = 433.0
+margin_bottom = 128.0
+text = "Calculate prices"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuyButton" type="Button" parent="."]
+margin_left = 320.0
+margin_top = 136.0
+margin_right = 356.0
+margin_bottom = 156.0
+text = "Buy"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Factory" parent="." instance=ExtResource( 1 )]
+position = Vector2( 96, 96 )
+
+[node name="Factory2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 256, 96 )
+_product_type = "Chocolate"
+_product_texture = ExtResource( 9 )
+
+[node name="Shop" type="Sprite" parent="."]
+position = Vector2( 112, 208 )
+texture = ExtResource( 6 )
+script = ExtResource( 2 )
+_factory_node_path_1 = NodePath("../Factory")
+_factory_node_path_2 = NodePath("../Factory2")
+_government_node_path = NodePath("../Government")
+
+[node name="Prices" type="Node" parent="Shop"]
+
+[node name="WithTaxes" type="Sprite" parent="Shop/Prices"]
+position = Vector2( 84.5, 285 )
+texture = ExtResource( 3 )
+
+[node name="label" type="Label" parent="Shop/Prices/WithTaxes"]
+margin_left = 19.5
+margin_top = -10.5
+margin_right = 27.5
+margin_bottom = 3.5
+text = "="
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Price" type="Label" parent="Shop/Prices/WithTaxes"]
+margin_left = 27.5
+margin_top = -10.5
+margin_right = 53.5
+margin_bottom = 8.5
+text = "1.2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bill" type="Sprite" parent="Shop/Prices/WithTaxes"]
+position = Vector2( 67.5, -5 )
+texture = ExtResource( 4 )
+
+[node name="WithoutTaxes" type="Sprite" parent="Shop/Prices"]
+position = Vector2( 88, 258.5 )
+texture = ExtResource( 3 )
+
+[node name="Bill" type="Sprite" parent="Shop/Prices/WithoutTaxes"]
+position = Vector2( 64, 0 )
+texture = ExtResource( 4 )
+
+[node name="Price" type="Label" parent="Shop/Prices/WithoutTaxes"]
+margin_left = 24.0
+margin_top = -8.0
+margin_right = 50.0
+margin_bottom = 11.0
+text = "1.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="label" type="Label" parent="Shop/Prices/WithoutTaxes"]
+margin_left = 16.0
+margin_top = -8.0
+margin_right = 24.0
+margin_bottom = 6.0
+text = "="
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Chocolate" type="Sprite" parent="Shop"]
+position = Vector2( 32, 8 )
+texture = ExtResource( 9 )
+
+[node name="ChocolatesInMarket" type="Label" parent="Shop/Chocolate"]
+margin_left = 16.0
+margin_top = -8.0
+margin_right = 42.0
+margin_bottom = 11.0
+text = "0.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Candies" type="Sprite" parent="Shop"]
+position = Vector2( 32, -16 )
+texture = ExtResource( 3 )
+
+[node name="CandiesInMarket" type="Label" parent="Shop/Candies"]
+margin_left = 16.0
+margin_top = -8.0
+margin_right = 42.0
+margin_bottom = 11.0
+text = "0.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bill" type="Sprite" parent="Shop"]
+position = Vector2( 88, 0 )
+texture = ExtResource( 4 )
+
+[node name="MoneyInMarket" type="Label" parent="Shop/Bill"]
+margin_left = 16.0
+margin_top = -8.0
+margin_right = 56.0
+margin_bottom = 6.0
+text = "0.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Government" type="Sprite" parent="."]
+position = Vector2( 368, 264 )
+texture = ExtResource( 8 )
+script = ExtResource( 10 )
+_factory_node_path_1 = NodePath("../Factory")
+_factory_node_path_2 = NodePath("../Factory2")
+
+[node name="ConsumingProducts" type="Sprite" parent="Government"]
+position = Vector2( -72, -60 )
+scale = Vector2( 1.14286, 1.14286 )
+texture = ExtResource( 5 )
+
+[node name="OwnedChocolatesAndCandies" type="Label" parent="Government/ConsumingProducts"]
+margin_left = 28.0
+margin_top = -3.5
+margin_right = 56.0
+margin_bottom = 10.5
+text = "0.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bill" type="Sprite" parent="Government"]
+position = Vector2( -72, -32 )
+texture = ExtResource( 4 )
+
+[node name="OwnedBills" type="Label" parent="Government/Bill"]
+margin_left = 16.0
+margin_top = -8.0
+margin_right = 40.0
+margin_bottom = 8.0
+text = "0.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BillsInMarket" type="Label" parent="Government/Bill"]
+margin_left = 48.0
+margin_top = -8.0
+margin_right = 73.0
+margin_bottom = 6.0
+text = "-0.0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CivilServant" type="Sprite" parent="Government"]
+position = Vector2( -40, 8 )
+texture = ExtResource( 7 )
+
+[node name="TaxRate" type="Label" parent="Government"]
+margin_left = -32.0
+margin_top = 40.0
+margin_right = 8.0
+margin_bottom = 54.0
+text = "20%"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Globals" type="Node" parent="."]
+script = ExtResource( 11 )
+[connection signal="pressed" from="ProduceButton" to="Factory" method="_on_ProduceButton_pressed"]
+[connection signal="pressed" from="ProduceButton" to="Factory2" method="_on_ProduceButton_pressed"]
+[connection signal="pressed" from="CreateMoney" to="Government" method="_on_CreateMoney_pressed"]
+[connection signal="pressed" from="SendProductsToMarketButton" to="Factory" method="_on_SendProductsToMarketButton_pressed"]
+[connection signal="pressed" from="SendProductsToMarketButton" to="Factory2" method="_on_SendProductsToMarketButton_pressed"]
+[connection signal="pressed" from="SendMoneyToMarketButton" to="Factory" method="_on_SendMoneyToMarketButton_pressed"]
+[connection signal="pressed" from="SendMoneyToMarketButton" to="Factory2" method="_on_SendMoneyToMarketButton_pressed"]
+[connection signal="pressed" from="SendMoneyToMarketButton" to="Government" method="_on_SendMoneyToMarketButton_pressed"]
+[connection signal="pressed" from="CalculatePrices" to="Shop" method="_on_CalculatePrices_pressed"]
+[connection signal="pressed" from="BuyButton" to="Factory" method="_on_BuyButton_pressed"]
+[connection signal="pressed" from="BuyButton" to="Factory2" method="_on_BuyButton_pressed"]
+[connection signal="pressed" from="BuyButton" to="Government" method="_on_BuyButton_pressed"]
