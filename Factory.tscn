@@ -79,3 +79,14 @@ text = "-0.0"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="BuyButton" type="Button" parent="."]
+margin_left = 45.0
+margin_top = -14.0
+margin_right = 81.0
+margin_bottom = 6.0
+text = "Buy"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="BuyButton" to="." method="_on_BuyButton_pressed"]

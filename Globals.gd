@@ -12,6 +12,8 @@ var _tax_rate = 0.2
 func _ready():
 	pass # Replace with function body.
 
+func get_price_without_taxes()->float:
+	return (1-_tax_rate)*_product_price
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

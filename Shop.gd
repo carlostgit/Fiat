@@ -13,7 +13,11 @@ export(NodePath) var _government_node_path
 #var _factory_chocolates = {}
 #var _factory_money = {}
 
+const _MovingProductSceneRes = preload("res://MovingProduct.tscn")
+
 var _person_array = []
+
+var _government = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -35,9 +39,106 @@ func _ready():
 	_person_array.append(factory2)
 	_person_array.append(government)
 	
+	_government = government
+	
+	self.update_candies_in_market()
+	self.update_chocolate_in_market()
+	self.update_money_in_market()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+func get_money_in_market():
+	var amount:float = 0
+	for person in _person_array:
+		amount += person.get_money_in_market()
+	return amount
+
+func get_candies_in_market():
+	var amount:float = 0
+	for person in _person_array:
+		amount += person.get_candies_in_market()
+	return amount
+
+func get_chocolates_in_market():
+	var amount:float = 0
+	for person in _person_array:
+		amount += person.get_chocolates_in_market()
+	return amount
+
+func buy_candies(max_money_arg:float, buyer_arg:Node):
+	return buy_products(max_money_arg,buyer_arg,"Candy")
+	
+func buy_chocolates(max_money_arg:float, buyer_arg:Node):
+	return buy_products(max_money_arg,buyer_arg,"Chocolate")
+
+func buy_products(max_money_arg:float, buyer_arg:Node, product_type_arg:String):
+	var money_used:float = 0.0
+	var max_taxes:float = max_money_arg*Globals._tax_rate
+	var max_money_without_taxes = max_money_arg-max_taxes
+	var candies_buyable_with_this_money:float = max_money_arg/Globals._product_price
+	var candies_in_market:float = self.get_candies_in_market()
+	if (product_type_arg!="Candy"):
+		candies_in_market = self.get_chocolates_in_market()
+	
+	var candies_to_buy = min(candies_buyable_with_this_money,candies_in_market)
+	var real_taxes:float = candies_to_buy*Globals._product_price*Globals._tax_rate
+	
+	transfer_money(real_taxes,buyer_arg,self._government)
+	
+	money_used = candies_to_buy*Globals._product_price
+	#TODO
+	var remaining_candies_to_buy:float = candies_to_buy
+	for person in _person_array:
+		if (remaining_candies_to_buy>0):
+			var amount_candies_of_person:float = person.get_candies_in_market()
+			if (product_type_arg!="Candy"):
+				amount_candies_of_person = person.get_chocolates_in_market()
+			if (0==amount_candies_of_person):
+				continue
+				
+			var amount_of_products_bought_from_person=0
+			if(remaining_candies_to_buy>amount_candies_of_person):
+				amount_of_products_bought_from_person = amount_candies_of_person				
+				remaining_candies_to_buy -=amount_candies_of_person
+			else:
+				amount_of_products_bought_from_person = remaining_candies_to_buy
+				remaining_candies_to_buy = 0
+			var money_to_seller_after_taxes = Globals.get_price_without_taxes()*amount_of_products_bought_from_person
+			
+			exchange(buyer_arg, person, money_to_seller_after_taxes, amount_of_products_bought_from_person, product_type_arg)
+	
+	return money_used
+
+func exchange(buyer_arg:Node, seller_arg:Node, money_amount_arg:float, product_amount_arg:float, product_type_arg:String):
+#	var transaction:Dictionary = {
+#		"buyer":buyer_arg, 
+#		"seller":seller_arg, 
+#		"money_amount": money_amount_arg, 
+#		"product_amount":product_amount_arg,
+#		"product_type":product_type_arg
+#		}
+	seller_arg.remove_products_from_market(product_amount_arg)
+#	seller_arg.add_owned_money(money_amount_arg)
+	create_moving_product(buyer_arg,seller_arg,"Money",money_amount_arg)
+
+	buyer_arg.remove_money_from_market(money_amount_arg)	
+#	buyer_arg.add_consumed_products(product_amount_arg)	
+	create_moving_product(seller_arg,buyer_arg,product_type_arg,product_amount_arg)
+	
+
+func transfer_money(amount_arg:float,origin_arg:Node,destiny_arg:Node):
+#	destiny_arg.add_owned_money(amount_arg)
+	origin_arg.remove_money_from_market(amount_arg)
+	create_moving_product(origin_arg,destiny_arg,"Money",amount_arg)
+	
+#	pass
+
+func create_moving_product(origin_arg:Node2D,destiny_arg:Node2D,product_type_arg:String,amount_arg:float):
+	var movingProd = _MovingProductSceneRes.instance()
+#	$"../".add_child(movingProd)
+	self.get_parent().add_child(movingProd)
+	movingProd.init(origin_arg,destiny_arg, product_type_arg,amount_arg)
 
 func on_money_in_market(amount_arg:float, factory_arg):
 #	print(amount_arg,factory_arg)
@@ -46,10 +147,11 @@ func on_money_in_market(amount_arg:float, factory_arg):
 	update_money_in_market()
 	
 func update_money_in_market():
-	var amount:float = 0
-	for person in _person_array:
-		amount += person.get_money_in_market()
-	
+#	var amount:float = 0
+#	for person in _person_array:
+#		amount += person.get_money_in_market()
+#
+	var amount:float = get_money_in_market()
 	$Bill/MoneyInMarket.set_text(str(amount))
 	
 func on_chocolates_in_market(amount_arg:float, factory_arg):
@@ -59,14 +161,8 @@ func on_chocolates_in_market(amount_arg:float, factory_arg):
 	update_chocolate_in_market()
 	
 func update_chocolate_in_market():
-#	var amount:float = 0
-#	for factory in _factory_chocolates:
-#		amount += _factory_chocolates[factory]
-
-	var amount:float = 0
-	for person in _person_array:
-		amount += person.get_chocolates_in_market()
-
+	
+	var amount:float = get_chocolates_in_market()
 	$Chocolate/ChocolatesInMarket.set_text(str(amount))
 
 func on_candies_in_market(amount_arg:float, factory_arg):
@@ -76,14 +172,8 @@ func on_candies_in_market(amount_arg:float, factory_arg):
 	update_candies_in_market()
 	
 func update_candies_in_market():
-#	var amount:float = 0
-#	for factory in _factory_candies:
-#		amount = +_factory_candies[factory]
 
-	var amount:float = 0
-	for person in _person_array:
-		amount += person.get_candies_in_market()
-	
+	var amount:float = self.get_candies_in_market()
 	$Candies/CandiesInMarket.set_text(str(amount))
 
 func on_remove_products_from_market(amount_arg:float, factory_arg):
