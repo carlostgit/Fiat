@@ -22,11 +22,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if (_origin!=null and _destiny!=null):
-		var current_pos:Vector2 = self.get_position()
+		var current_pos:Vector2 = self.get_global_position()
 		var param_speed = 100.0
-		var destiny_pos = _destiny.get_position()
+		var destiny_pos = _destiny.get_global_position()
 		var advance = param_speed*(current_pos.direction_to(destiny_pos).normalized())*delta
-		self.set_position(current_pos+advance)
+		self.set_global_position(current_pos+advance)
 		
 		if (current_pos.distance_to(destiny_pos)<1.0):
 			destination_arrived()
@@ -47,7 +47,7 @@ func init(origin_arg:Node2D, destiny_arg:Node2D, product_type_arg:String, amount
 	
 	$Sprite/Label.set_text(str(amount_arg))
 		
-	self.set_position(origin_arg.get_position())
+	self.set_global_position(origin_arg.get_global_position())
 	
 func destination_arrived():
 	if (_product_type == "Candy" or _product_type == "Chocolate"):

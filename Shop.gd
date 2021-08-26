@@ -35,11 +35,11 @@ func _ready():
 	government.connect("signal_remove_products_from_market",self, "on_remove_products_from_market")
 	government.connect("signal_money_in_market",self,"on_money_in_market")
 
-	_person_array.append(factory1)
-	_person_array.append(factory2)
-	_person_array.append(government)
+	_person_array.append(factory1.get_consumer())
+	_person_array.append(factory2.get_consumer())
+	_person_array.append(government.get_consumer())
 	
-	_government = government
+	_government = government.get_consumer()
 	
 	self.update_candies_in_market()
 	self.update_chocolate_in_market()
