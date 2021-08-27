@@ -34,20 +34,20 @@ func get_consumer() -> Node:
 ####
 
 func buy():
-
-	var money_in_market = $Consumer._money_in_market
-	
-	if($Consumer._demanded_product_type=="Candy"):
-		$Consumer._shop.buy_candies(money_in_market,$Consumer)
-	else:
-		$Consumer._shop.buy_chocolates(money_in_market,$Consumer)
+	$Consumer.buy()
+#	var money_in_market = $Consumer._money_in_market
+#
+#	if($Consumer._demanded_product_type=="Candy"):
+#		$Consumer._shop.buy_candies(money_in_market,$Consumer)
+#	else:
+#		$Consumer._shop.buy_chocolates(money_in_market,$Consumer)
 
 ####
 
-func get_total_value_in_market():
-	var value_of_products_in_market = Globals._product_price*$Consumer._products_in_market
-	var total_value_in_market = value_of_products_in_market + $Consumer._money_in_market
-	return total_value_in_market
+#func get_total_value_in_market():
+#	var value_of_products_in_market = Globals._product_price*$Consumer._products_in_market
+#	var total_value_in_market = value_of_products_in_market + $Consumer._money_in_market
+#	return total_value_in_market
 	
 ####
 

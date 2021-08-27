@@ -47,7 +47,23 @@ func _ready():
 #
 #func set_government(government_arg:Node):
 #	_government = government_arg
+
+func buy():
+
+	var money_in_market = _money_in_market
 	
+	if(_demanded_product_type=="Candy"):
+		#Factory
+		_shop.buy_candies(money_in_market,self)
+	elif(_demanded_product_type=="Chocolate"):
+		#Factory
+		_shop.buy_chocolates(money_in_market,self)
+	else:
+		#Government
+		_shop.buy_candies(money_in_market/2,self)
+		_shop.buy_chocolates(money_in_market/2,self)
+
+
 func update_produced_product_texture():
 	$Product.set_texture(_product_texture)
 
@@ -81,7 +97,6 @@ func remove_money_from_market(amount_arg:float):
 
 func get_money_in_market()->float:
 	return _money_in_market
-
 ####
 
 func add_consumed_products(amount_arg:float):

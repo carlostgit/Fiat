@@ -20,10 +20,10 @@ func get_consumer() -> Node:
 	return $Consumer
 
 func buy():
-	
-	var money_in_market:float = $Consumer._money_in_market
-	$Consumer._shop.buy_candies(money_in_market/2,$Consumer)
-	$Consumer._shop.buy_chocolates(money_in_market/2,$Consumer)
+	$Consumer.buy()	
+#	var money_in_market:float = $Consumer._money_in_market
+#	$Consumer._shop.buy_candies(money_in_market/2,$Consumer)
+#	$Consumer._shop.buy_chocolates(money_in_market/2,$Consumer)
 	
 func _on_BuyButton_pressed():
 	buy()

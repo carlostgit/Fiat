@@ -73,6 +73,8 @@ func buy_chocolates(max_money_arg:float, buyer_arg:Node):
 	return buy_products(max_money_arg,buyer_arg,"Chocolate")
 
 func buy_products(max_money_arg:float, buyer_arg:Node, product_type_arg:String):
+	if (Globals._product_price<=0):
+		return
 	var money_used:float = 0.0
 	var max_taxes:float = max_money_arg*Globals._tax_rate
 	var max_money_without_taxes = max_money_arg-max_taxes
@@ -87,7 +89,7 @@ func buy_products(max_money_arg:float, buyer_arg:Node, product_type_arg:String):
 	transfer_money(real_taxes,buyer_arg,self._government)
 	
 	money_used = candies_to_buy*Globals._product_price
-	#TODO
+	
 	var remaining_candies_to_buy:float = candies_to_buy
 	for person in _person_array:
 		if (remaining_candies_to_buy>0):
@@ -118,21 +120,23 @@ func exchange(buyer_arg:Node, seller_arg:Node, money_amount_arg:float, product_a
 #		"product_amount":product_amount_arg,
 #		"product_type":product_type_arg
 #		}
-	seller_arg.remove_products_from_market(product_amount_arg)
-#	seller_arg.add_owned_money(money_amount_arg)
-	create_moving_product(buyer_arg,seller_arg,"Money",money_amount_arg)
 
-	buyer_arg.remove_money_from_market(money_amount_arg)	
-#	buyer_arg.add_consumed_products(product_amount_arg)	
-	create_moving_product(seller_arg,buyer_arg,product_type_arg,product_amount_arg)
+	if (money_amount_arg>0 or product_amount_arg>0):
+		seller_arg.remove_products_from_market(product_amount_arg)
+	#	seller_arg.add_owned_money(money_amount_arg)
+		create_moving_product(buyer_arg,seller_arg,"Money",money_amount_arg)
+
+		buyer_arg.remove_money_from_market(money_amount_arg)	
+	#	buyer_arg.add_consumed_products(product_amount_arg)	
+		create_moving_product(seller_arg,buyer_arg,product_type_arg,product_amount_arg)
 	
 
 func transfer_money(amount_arg:float,origin_arg:Node,destiny_arg:Node):
 #	destiny_arg.add_owned_money(amount_arg)
-	origin_arg.remove_money_from_market(amount_arg)
-	create_moving_product(origin_arg,destiny_arg,"Money",amount_arg)
-	
-#	pass
+	if (amount_arg>0):
+		origin_arg.remove_money_from_market(amount_arg)
+		create_moving_product(origin_arg,destiny_arg,"Money",amount_arg)
+		
 
 func create_moving_product(origin_arg:Node2D,destiny_arg:Node2D,product_type_arg:String,amount_arg:float):
 	var movingProd = _MovingProductSceneRes.instance()

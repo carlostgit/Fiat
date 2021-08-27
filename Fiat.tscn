@@ -199,6 +199,7 @@ script = ExtResource( 10 )
 
 [node name="Consumer" parent="Government" instance=ExtResource( 12 )]
 position = Vector2( 0, -40 )
+_demanded_product_type = "CandyAndChocolate"
 _shop_node_path = NodePath("../../Shop")
 _government_node_path = NodePath("..")
 _production_rate = 0.0
@@ -231,10 +232,10 @@ script = ExtResource( 11 )
 [connection signal="pressed" from="SendProductsToMarketButton" to="Factory" method="_on_SendProductsToMarketButton_pressed"]
 [connection signal="pressed" from="SendProductsToMarketButton" to="Factory2" method="_on_SendProductsToMarketButton_pressed"]
 [connection signal="pressed" from="SendMoneyToMarketButton" to="Factory" method="_on_SendMoneyToMarketButton_pressed"]
-[connection signal="pressed" from="SendMoneyToMarketButton" to="Factory2" method="_on_SendMoneyToMarketButton_pressed"]
 [connection signal="pressed" from="SendMoneyToMarketButton" to="Government" method="_on_SendMoneyToMarketButton_pressed"]
+[connection signal="pressed" from="SendMoneyToMarketButton" to="Factory2" method="_on_SendMoneyToMarketButton_pressed"]
 [connection signal="pressed" from="CalculatePrices" to="Shop" method="_on_CalculatePrices_pressed"]
 [connection signal="pressed" from="BuyButton" to="Factory" method="_on_BuyButton_pressed"]
-[connection signal="pressed" from="BuyButton" to="Factory2" method="_on_BuyButton_pressed"]
 [connection signal="pressed" from="BuyButton" to="Government" method="_on_BuyButton_pressed"]
+[connection signal="pressed" from="BuyButton" to="Factory2" method="_on_BuyButton_pressed"]
 [connection signal="pressed" from="Government/Buy" to="Government" method="_on_Buy_pressed"]
